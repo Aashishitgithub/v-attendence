@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Virtuous International K-12 - Teacher Attendance</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+    body { font-family: Arial; text-align: center; padding: 20px; background:#f2f5f9;}
+    h2 { background:#2c3e50; color:white; padding:12px; border-radius:8px; }
+    select, button {
+      padding: 12px;
+      margin: 10px;
+      width: 85%;
+      font-size: 16px;
+    }
+    button {
+      background: green;
+      color: white;
+      border: none;
+      border-radius: 8px;
+    }
+  </style>
+</head>
+<body>
+
+<h2>🏫 Virtuous International K-12 School<br>Teacher Attendance</h2>
+
+<select id="name">
+  <option value="">Select Teacher</option>
+  <option>Abhishek Sir </option>
+  <option>Rakhi Maam</option>
+  <option>Iqwal Sir</option>
+  <option>Aashish Raj</option>
+  <option>Amit</option>
+  <option>Masum </option>
+  <option>Aaradhya </option>
+  <option>Kiran</option>
+  <option>Akansha</option>
+  <option>archana </option>
+</select>
+
+<button onclick="markAttendance()">📍 Mark Attendance</button>
+
+<p id="msg"></p>
+
+<script>
+function markAttendance() {
+
+  let name = document.getElementById("name").value;
+  if(name == "") {
+    alert("Select Teacher Name");
+    return;
+  }
+
+  let now = new Date();
+  let date = now.toLocaleDateString();
+  let time = now.toLocaleTimeString();
+
+  navigator.geolocation.getCurrentPosition(function(pos) {
+
+    let data = {
+      name: name,
+      date: date,
+      time: time,
+      lat: pos.coords.latitude,
+      lon: pos.coords.longitude
+    };
+
+    fetch("https://script.google.com/macros/s/AKfycbyA9o8t90d51bZEee3--CTvhwI7GnAktEPjoUzYD15VXTg-713_C-W1_ecZHZ5gi7oB/exec", {
+      method: "POST",
+      body: JSON.stringify(data)
+    })
+    .then(() => {
+      document.getElementById("msg").innerHTML =
+        "✅ Attendance Saved Successfully";
+    });
+
+  }, function() {
+    alert("Allow location 📍");
+  });
+}
+</script>
+
+</body>
+</html>
